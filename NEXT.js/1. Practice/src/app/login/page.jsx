@@ -5,10 +5,9 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const Signup = () => {
+const Login = () => {
   const router = useRouter();
   const [user, setUser] = useState({
-    userName: "",
     email: "",
     password: "",
   });
@@ -18,8 +17,7 @@ const Signup = () => {
   useEffect(() => {
     if (
       user.email.length > 0 &&
-      user.password.length > 0 &&
-      user.userName.length > 0
+      user.password.length > 0
     ) {
       setButtonDisabled(false);
     } else {
@@ -27,31 +25,22 @@ const Signup = () => {
     }
   }, [user]);
 
-  const onSignup = async () => {
+  const onLogin = async () => {
     try {
       setLoding(true);
-      const response = await axios.post("/api/users/signup", user);
-      console.log("signup successful", response.data);
-      router.push("/login");
+      const response = await axios.post("/api/users/login", user);
+      console.log("login successful", response.data);
+      router.push("/profile");
     } catch (error) {
-      console.log("Signup failed : ", error);
+      console.log("login failed : ", error);
       toast.error(error.message);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>{loading ? "Processing..." : "Signup"}</h1>
+      <h1>{loading ? "Processing..." : "Login"}</h1>
       <hr />
-      <label htmlFor="userName">userName</label>
-      <input
-        id="userName"
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:outline-gray-300 text-black"
-        value={user.userName}
-        onChange={(e) => setUser({ ...user, userName: e.target.value })}
-        placeholder="userName"
-        type="text"
-      />
       <label htmlFor="userName">email</label>
       <input
         id="email"
@@ -76,15 +65,15 @@ const Signup = () => {
         </button>
       ) : (
         <button
-          onClick={onSignup}
+          onClick={onLogin}
           className="bg-[#00bbff] px-3 py-1 rounded-lg font-semibold cursor-pointer"
         >
-          Signup
+          Login
         </button>
       )}
-      <Link href="/login">Visit login page</Link>
+      <Link href="/signup">Visit signup page</Link>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
